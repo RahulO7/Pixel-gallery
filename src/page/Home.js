@@ -5,13 +5,16 @@ import styled from "styled-components";
 export default function Home() {
   const [query, setQuery] = useState("");
   const [photos, setPhotos] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const getphotos = async () => {
     let url = `https://api.pexels.com/v1/search?query=all&per_page=50`;
+    setLoading(true)
     if (query === "") {
       url = `https://api.pexels.com/v1/search?query=all&per_page=50`;
     } else {
+
+      setPhotos([])
       url = `https://api.pexels.com/v1/search?query=${query}&per_page=50`;
     }
 
@@ -27,6 +30,7 @@ export default function Home() {
         console.log(res.data.photos);
         // setLoading(false)
         setPhotos(res.data.photos);
+        setLoading(false)
       })
       .catch(function (error) {
         console.log(error.toJSON());
@@ -59,7 +63,7 @@ export default function Home() {
         <button onClick={search}>Search</button>
       </Search>
       <Hom>
-        {photos.map((e, id) => {
+        {loading? <p> Loading...</p>: photos.map((e, id) => {
           return (
             <Images key={id}>
               <p>
@@ -80,6 +84,7 @@ export default function Home() {
             </Images>
           );
         })}
+        
       </Hom>
     </>
   );
