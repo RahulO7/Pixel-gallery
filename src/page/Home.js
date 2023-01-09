@@ -1,20 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { TfiClose } from "react-icons/tfi";
 
 export default function Home() {
   const [query, setQuery] = useState("");
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
+
   // const[page,setPage] = useState("1")
-  const[fview,setFview] = useState(false)
-  const[fimg,setFimg] = useState({})
+  const [fview, setFview] = useState(false);
+  const [fimg, setFimg] = useState({});
 
   const getphotos = async () => {
-    let url = `https://api.pexels.com/v1/search?query=${query === ""?"all":query}&per_page=100`;
-    setLoading(true)
-   
-   
+    let url = `https://api.pexels.com/v1/search?query=${
+      query === "" ? "all" : query
+    }&per_page=100`;
+    setLoading(true);
 
     await axios({
       method: "GET",
@@ -28,8 +30,7 @@ export default function Home() {
         console.log(res.data.photos);
         // setLoading(false)
         setPhotos(res.data.photos);
-        setLoading(false)
-        
+        setLoading(false);
       })
       .catch(function (error) {
         console.log(error.toJSON());
@@ -40,31 +41,27 @@ export default function Home() {
   };
   // const prevp = () => {
   //   setPage()
-    
+
   // };
   // const nextp = () => {
   //   setPage(page + 1 )
-    
+
   // };
 
   const fullView = (id) => {
-    const view = photos.find((elem)=>{
+    const view = photos.find((elem) => {
       return JSON.stringify(elem.id) === id;
-    })
-   
-console.log(view)
-setFview(true)
-setFimg(view.src)
+    });
 
-};
-  const close = () => {
-    setFview(false)
-    setFimg({})
+    console.log(view);
+    setFview(true);
 
-
-    
+    setFimg(view.src);
   };
-
+  const close = () => {
+    setFview(false);
+    setFimg({});
+  };
 
   const keyPress = (e) => {
     if (e.keyCode === 13) {
@@ -73,12 +70,12 @@ setFimg(view.src)
   };
 
   useEffect(() => {
-    getphotos()
+    getphotos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  }, []);
   return (
     <>
-      <Search style={{opacity:fview? "10%":"100%"}}>
+      <Search style={{ opacity: fview ? "5%" : "100%" }}>
         <input
           type="text"
           onChange={(e) => setQuery(e.target.value.toLowerCase())}
@@ -88,15 +85,18 @@ setFimg(view.src)
         />
         <button onClick={search}>Search</button>
       </Search>
-      <Hom style={{opacity:fview? "10%":"100%"}}>
-        {loading? <p> Loading...</p>:photos.map((e,ind) => {
-          return (
-            <Images key={ind} >
-              <p>
-                <b>Shot By:-</b>
-                {e.photographer.toUpperCase()}
-              </p>
-             
+      <Hom style={{ opacity: fview ? "5%" : "100%" }}>
+        {loading ? (
+          <p> Loading...</p>
+        ) : (
+          photos.map((e, ind) => {
+            return (
+              <Images key={ind}>
+                <p>
+                  <b>Shot By:-</b>
+                  {e.photographer.toUpperCase()}
+                </p>
+
                 <img
                   src={e.src.portrait}
                   alt={e.alt}
@@ -105,29 +105,37 @@ setFimg(view.src)
                     height: "300px",
                     borderRadius: "10px",
                   }}
-                  onClick ={()=>fullView(JSON.stringify(e.id))}  />
-             
-              
-            </Images>
-          );
-        })}
-        
+                  onClick={() => fullView(JSON.stringify(e.id))}
+                />
+              </Images>
+            );
+          })
+        )}
       </Hom>
-      <Fiv style={{display: fview ? "flex":"none"}}>
-        <div><img src={fimg.large} alt="" /> <button onClick={close}>Close</button></div></Fiv>
+
+      <Fiv style={{ display: fview ? "flex" : "none" }}>
+        <Fcdiv>
+          <div>
+            <Idiv>
+            <img src={fimg.large} alt="" /></Idiv>
+          </div>
+            <Bdiv>
+            <button onClick={close}><TfiClose size={32} style={{color:"red"}}/></button>
+            </Bdiv>
+        </Fcdiv>
+      </Fiv>
 
       {/* <Buttons>
         <button onClick={getphotos("prev")}>prev</button>
         <button onClick={getphotos("next")}>next</button>
         
       </Buttons> */}
-
-      </>
-)}
-
+    </>
+  );
+}
 
 const Hom = styled.div`
-position: relative;
+  position: relative;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -140,6 +148,11 @@ const Search = styled.div`
   width: 100vw;
   text-align: center;
   margin-top: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background-color: white;
+  padding: 10px;
 
   input {
     width: 40%;
@@ -179,7 +192,6 @@ const Images = styled.div`
 // align-items: center;
 // justify-content: center;
 
-
 // button{
 //   padding: 5px;
 //   margin: 10px;
@@ -187,37 +199,52 @@ const Images = styled.div`
 // }
 
 // `;
-const Fiv = styled.div`
-width: 100vw;
-  height: 100vh;
+
+const Fcdiv = styled.div`
+position: relative;
 
 
-position: fixed;
-top:0;
 
 
-justify-content: center;
-align-items: center;
-
-/* width: 100%; */
-margin: auto; 
-z-index: 99;
-
-
-img{
- max-width: 90vw;
- max-height: 70vh;
-
-}
-button{
-  position: absolute;
-  transform: translateX(-50px);
-  padding: 5px;
-  /* bottom: 20px; */
-  
+img {
+    max-width: 90vw;
+    max-height: 70vh;
+  }
+  button {
+    
+    /* transform: translateX(-50px); */
+    padding: 5px;
+   cursor: pointer;
+   border: none;
+   background: transparent;
 
 
-}
+  }
+
 
 `
+const Idiv = styled.div`
+`
+const Bdiv = styled.div`
+width: 100%;
+text-align: center;
+position: absolute;
+bottom: -50px;
+`
+const Fiv = styled.div`
+  width: 100vw;
+  height: 100vh;
 
+  position: fixed;
+  top: 0;
+
+  
+  justify-content: center;
+  align-items: center;
+
+  /* width: 100%; */
+  margin: auto;
+  z-index: 99;
+
+  
+`;
