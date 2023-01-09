@@ -8,14 +8,14 @@ export default function Home() {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // const[page,setPage] = useState("1")
+  const[page,setPage] = useState(1)
   const [fview, setFview] = useState(false);
   const [fimg, setFimg] = useState({});
 
   const getphotos = async () => {
     let url = `https://api.pexels.com/v1/search?query=${
       query === "" ? "all" : query
-    }&per_page=100`;
+    }&page=${page}&per_page=20`;
     setLoading(true);
 
     await axios({
@@ -69,11 +69,19 @@ export default function Home() {
       getphotos();
     }
   };
+  const next = () => {
+    setPage((prev)=> prev + 1 )
+ 
+  };
+  const back = () => {
+    setPage((prev)=> prev - 1 )
+   
+  };
 
   useEffect(() => {
     getphotos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page]);
   return (
     <>
       <Search style={{ opacity: fview ? "5%" : "100%" }}>
@@ -126,11 +134,11 @@ export default function Home() {
         </Fcdiv>
       </Fiv>
 
-      {/* <Buttons>
-        <button onClick={getphotos("prev")}>prev</button>
-        <button onClick={getphotos("next")}>next</button>
+      <Buttons>
+        <button onClick={back} disabled={page === 1}>Prev</button>
+        <button onClick={next}>Next</button>
         
-      </Buttons> */}
+      </Buttons>
     </>
   );
 }
@@ -186,21 +194,21 @@ const Images = styled.div`
     transform: scale(1.1);
   }
 `;
-// const Buttons = styled.div`
-// text-align: center;
-// width: 100%;
-// margin: 20px;
-// display: flex;
-// align-items: center;
-// justify-content: center;
+const Buttons = styled.div`
+text-align: center;
+width: 100%;
+margin: 20px;
+display: flex;
+align-items: center;
+justify-content: center;
 
-// button{
-//   padding: 5px;
-//   margin: 10px;
-//   cursor: pointer;
-// }
+button{
+  padding: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
 
-// `;
+`;
 
 const Fcdiv = styled.div`
 position: relative;
