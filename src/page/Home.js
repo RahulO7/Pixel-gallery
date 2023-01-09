@@ -6,17 +6,15 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
+  // const[page,setPage] = useState("1")
+  const[fview,setFview] = useState(false)
+  const[fimg,setFimg] = useState({})
 
   const getphotos = async () => {
-    let url = `https://api.pexels.com/v1/search?query=all&per_page=50`;
+    let url = `https://api.pexels.com/v1/search?query=${query === ""?"all":query}&per_page=100`;
     setLoading(true)
-    if (query === "") {
-      url = `https://api.pexels.com/v1/search?query=all&per_page=50`;
-    } else {
-
-      setPhotos([])
-      url = `https://api.pexels.com/v1/search?query=${query}&per_page=50`;
-    }
+   
+   
 
     await axios({
       method: "GET",
@@ -31,6 +29,7 @@ export default function Home() {
         // setLoading(false)
         setPhotos(res.data.photos);
         setLoading(false)
+        
       })
       .catch(function (error) {
         console.log(error.toJSON());
@@ -39,6 +38,33 @@ export default function Home() {
   const search = () => {
     getphotos();
   };
+  // const prevp = () => {
+  //   setPage()
+    
+  // };
+  // const nextp = () => {
+  //   setPage(page + 1 )
+    
+  // };
+
+  const fullView = (id) => {
+    const view = photos.find((elem)=>{
+      return JSON.stringify(elem.id) === id;
+    })
+   
+console.log(view)
+setFview(true)
+setFimg(view.src)
+
+};
+  const close = () => {
+    setFview(false)
+    setFimg({})
+
+
+    
+  };
+
 
   const keyPress = (e) => {
     if (e.keyCode === 13) {
@@ -52,7 +78,7 @@ export default function Home() {
   },[]);
   return (
     <>
-      <Search>
+      <Search style={{opacity:fview? "10%":"100%"}}>
         <input
           type="text"
           onChange={(e) => setQuery(e.target.value.toLowerCase())}
@@ -62,15 +88,15 @@ export default function Home() {
         />
         <button onClick={search}>Search</button>
       </Search>
-      <Hom>
-        {loading? <p> Loading...</p>: photos.map((e, id) => {
+      <Hom style={{opacity:fview? "10%":"100%"}}>
+        {loading? <p> Loading...</p>:photos.map((e,ind) => {
           return (
-            <Images key={id}>
+            <Images key={ind} >
               <p>
                 <b>Shot By:-</b>
                 {e.photographer.toUpperCase()}
               </p>
-              <a href={e.url}>
+             
                 <img
                   src={e.src.portrait}
                   alt={e.alt}
@@ -79,18 +105,29 @@ export default function Home() {
                     height: "300px",
                     borderRadius: "10px",
                   }}
-                />
-              </a>
+                  onClick ={()=>fullView(JSON.stringify(e.id))}  />
+             
+              
             </Images>
           );
         })}
         
       </Hom>
-    </>
-  );
-}
+      <Fiv style={{display: fview ? "flex":"none"}}>
+        <div><img src={fimg.large} alt="" /> <button onClick={close}>Close</button></div></Fiv>
+
+      {/* <Buttons>
+        <button onClick={getphotos("prev")}>prev</button>
+        <button onClick={getphotos("next")}>next</button>
+        
+      </Buttons> */}
+
+      </>
+)}
+
 
 const Hom = styled.div`
+position: relative;
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -128,8 +165,59 @@ const Search = styled.div`
 const Images = styled.div`
   margin: 20px;
   transition: transform 0.5s ease;
+  cursor: pointer;
 
   &&:hover {
     transform: scale(1.1);
   }
 `;
+// const Buttons = styled.div`
+// text-align: center;
+// width: 100%;
+// margin: 20px;
+// display: flex;
+// align-items: center;
+// justify-content: center;
+
+
+// button{
+//   padding: 5px;
+//   margin: 10px;
+//   cursor: pointer;
+// }
+
+// `;
+const Fiv = styled.div`
+width: 100vw;
+  height: 100vh;
+
+
+position: fixed;
+top:0;
+
+
+justify-content: center;
+align-items: center;
+
+/* width: 100%; */
+margin: auto; 
+z-index: 99;
+
+
+img{
+ max-width: 90vw;
+ max-height: 70vh;
+
+}
+button{
+  position: absolute;
+  transform: translateX(-50px);
+  padding: 5px;
+  /* bottom: 20px; */
+  
+
+
+}
+
+`
+
