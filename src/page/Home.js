@@ -49,8 +49,9 @@ export default function Home() {
   // };
 
   const fullView = (id) => {
+
     const view = photos.find((elem) => {
-      return JSON.stringify(elem.id) === id;
+      return elem.id === id;
     });
 
     console.log(view);
@@ -105,7 +106,7 @@ export default function Home() {
                     height: "300px",
                     borderRadius: "10px",
                   }}
-                  onClick={() => fullView(JSON.stringify(e.id))}
+                  onClick={() => fullView(e.id)}
                 />
               </Images>
             );
@@ -155,7 +156,8 @@ const Search = styled.div`
   padding: 10px;
 
   input {
-    width: 40%;
+    width: 60%;
+    max-width: 500px;
     margin: 5px;
     padding: 10px;
     outline: none;
