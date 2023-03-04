@@ -33,17 +33,19 @@ export default function Main() {
 
 const Wrapper = styled.div`
 width: 100vw;
+height: auto;
 /* background-color: black; */
-height: calc(100vh - 70px);
+
 display: flex;
 justify-content: center;
 z-index: 99;
 
 .items{
   width: 100%;
-  height: 100%;
-  /* overflow-y: scroll; */
-  margin: auto;
+  height: auto;
+  /* max-height: fit-content; */
+  /* overflow-y: hidden; */
+  /* margin: auto; */
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
