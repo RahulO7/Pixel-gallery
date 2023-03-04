@@ -16,9 +16,9 @@ const PhotosData =(props)=> {
   const getphotos = async () => {
     let url = `https://api.pexels.com/v1/search?query=${
       query === "" ? "all" : query
-    }&page=${page}&per_page=30`;
-    setLoading(true);
-
+    }&page=${page}&per_page=40`;
+    
+      setLoading(true)
     await axios({
       method: "GET",
       url: url,
@@ -76,7 +76,7 @@ const PhotosData =(props)=> {
 
 
   return (
-<PhotoContaxt.Provider value={{loading,back,next,keyPress,search,photos,setQuery,getphotos,query}}>
+<PhotoContaxt.Provider value={{loading,back,next,keyPress,search,photos,setQuery,getphotos,query,page}}>
     {props.children}
 </PhotoContaxt.Provider>
  

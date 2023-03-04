@@ -13,18 +13,22 @@ export default function Header() {
     <Wrapper>
       <div className='innerdiv'>
         <div className='subdiv'>
-          <input type="text" placeholder='Search Here' value={a.query} onChange={(e)=>a.setQuery(e.target.value.toLowerCase())} onKeyDown={a.keyPress}/>
+          <input type="text"  value={a.query} onChange={(e)=>a.setQuery(e.target.value.toLowerCase())} onKeyDown={a.keyPress} placeholder="Search here"/>
           <button onClick={a.search}>Search</button>
+         
           
         </div>
       </div>
+      
     </Wrapper>
   )
 }
 
 const Wrapper = styled.header`
 width: 100vw;
-
+display: flex;
+flex-direction: column;
+justify-content: center;
 
 
 
@@ -44,7 +48,7 @@ margin-bottom: 10px;
   align-items: center;
   
 
-background-color: antiquewhite;
+background-color: #8b72b5;
 
 
   .subdiv{
@@ -52,11 +56,15 @@ background-color: antiquewhite;
     max-width: 500px;
     height: 100%;
     position: relative;
+   
 
     input{
-      padding:5px;
+      padding:10px;
       width: 100%;
       outline: none;
+      border-radius: 10px;
+      border: none;
+   
 
 
     
@@ -64,19 +72,20 @@ background-color: antiquewhite;
     button{
       position: absolute;
       right: 0;
-      padding:5px;
+      padding:10px;
+       border-top-right-radius: 10px;
+       border-bottom-right-radius: 10px;
+      border: none;
 
     }
-    .placeholder{
-      /* height: 100%; */
-      font-size: 15px;
-      position: absolute;
-      left: 0;
-      top: 0;
-      /* padding:5px 7px; */
-    }
+   
     
   }
+  
+
+ 
 }
+
+
 
 `
